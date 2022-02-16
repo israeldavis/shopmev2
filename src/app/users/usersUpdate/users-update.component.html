@@ -1,0 +1,138 @@
+<app-email-duplicated-dialog
+  [email]="form.value.email"
+  ></app-email-duplicated-dialog>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <h2>{{pageTitle}}</h2>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="email"><b>E-mail</b></label>
+              <div class="col-md-10">
+                <input id="email"
+                       type="text"
+                       class="form-control"
+                       placeholder="E-mail"
+                       formControlName="email"
+                       [ngClass]="{'is-invalid': emailMessage}">
+                 <span class="invalid-feedback">
+                  {{emailMessage}}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="firstName"><b>First Name</b></label>
+              <div class="col-md-10">
+                <input id="firstName"
+                       type="text"
+                       class="form-control"
+                       placeholder="Nombre"
+                       formControlName="firstName"
+                       [ngClass]="{'is-invalid': firstNameMessage}">
+                 <span class="invalid-feedback">
+                  {{firstNameMessage}}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="lastName"><b>Last Name</b></label>
+              <div class="col-md-10">
+                <input id="lastName"
+                       type="text"
+                       class="form-control"
+                       placeholder="Last Name"
+                       formControlName="lastName"
+                       [ngClass]="{'is-invalid': lastNameMessage}">
+                <span class="invalid-feedback">
+                  {{lastNameMessage}}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="nombre"><b>Password</b></label>
+              <div class="col-md-10">
+                <input id="password"
+                       type="password"
+                       class="form-control"
+                       placeholder="Password"
+                       formControlName="password"
+                       [ngClass]="{'is-invalid': (form.get('password')?.touched ||
+                                  form.get('password')?.dirty) &&
+                                  !form.get('password')?.valid}">
+                <!-- <span class="invalid-feedback">
+                  <span *ngIf="form.get('password')?.errors['required']">
+                    Ingrese el password de este usuario.
+                  </span>
+                </span> -->
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="roles"><b>Roles</b></label>
+              <div class="col-md-10">
+                  <div class="form-check" formArrayName="roles" *ngFor="let role of rolesFormArray.controls; let i = index;" >
+                    <input class="form-check-input" type="checkbox" [formControlName]="i" >
+                    <label class="form-check-label" >
+                      {{rolesData[i].name}}
+                    </label>
+                  </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="enabled"><b>Enabled</b></label>
+              <div class="col-md-10">
+                  <div class="form-check" >
+                    <input class="form-check-input" type="checkbox" formControlName="enabled" id="enabled">
+
+                    <label class="form-check-label" >
+                      Enabled
+                    </label>
+                  </div>
+
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="fileImage"><b>Photos</b></label>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="file" #file class="form-control-file mt-5" accept="image/png, image/jpeg" name="image" (change)="preview(file.files)" formControlName="image" />
+                    <span style="color: red;" *ngIf="photoMessage">{{photoMessage}}</span>
+                  </div>
+                  <div class="col-md-6">
+
+                    <img src="assets/img/default-user.png" alt="person" class="img-fluid" *ngIf="user?.id == 0 && !imgURL">
+                    <img [src]="imgURL" class="img-fluid" width="200px" *ngIf="user?.id == 0 && imgURL">
+
+                    <img [src]="user.photosImagePath" class="img-fluid" width="200px" *ngIf="user?.id != 0 && !imgURL">
+                    <img [src]="imgURL" class="img-fluid" width="200px" *ngIf="user?.id != 0 && imgURL">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <input type="submit" value="Save" class="btn btn-primary m-3">
+              <input type="button" value="Cancel" class="btn btn-secondary" [routerLink]="['/users/list']"  />
+            </div>
+
+          </form>
+        </div>
+      </div> <!-- card -->
+    </div>
+  </div> <!-- row -->
+</div>
+
+

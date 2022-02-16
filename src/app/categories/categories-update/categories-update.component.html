@@ -1,0 +1,98 @@
+
+<app-unique-name-dialog
+></app-unique-name-dialog>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 mt-3">
+      <div class="card">
+        <div class="card-header">
+          <h2>{{pageTitle}}</h2>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="submit()" enctype="multipart/form-data">
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="name"><b>Category Name</b></label>
+              <div class="col-md-10">
+                <input id="name"
+                       type="text"
+                       class="form-control"
+                       placeholder="Category Name"
+                       formControlName="name"
+                       [ngClass]="{'is-invalid': nameMessage}">
+                <span class="invalid-feedback">
+                  {{nameMessage}}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="alias"><b>Alias</b></label>
+              <div class="col-md-10">
+                <input id="alias"
+                       type="text"
+                       class="form-control"
+                       placeholder="Alias"
+                       formControlName="alias"
+                       [ngClass]="{'is-invalid': aliasMessage}">
+                <span class="invalid-feedback">
+                  {{aliasMessage}}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="parent"><b>Parent Category</b></label>
+              <div class="col-md-10">
+                  <select class="form-control" id="parent" formControlName="parent">
+                    <option value=null>[No Parent]</option>
+                    <option *ngFor="let cat of listCategories" [ngValue]="cat" >{{cat.name}}</option>
+                  </select>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="fileImage"><b>Image</b></label>
+              <div class="col-md-10">
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="file" #file class="form-control-file mt-5" accept="image/png, image/jpeg" name="image" (change)="preview(file.files)" formControlName="image" />
+                    <span style="color: red;" *ngIf="imageMessage">{{imageMessage}}</span>
+                  </div>
+                  <div class="col-md-6">
+
+                    <img src="assets/img/image-thumbnail.png" alt="categoria" class="img-fluid" *ngIf="category?.id == 0 && !imgURL">
+                    <img [src]="imgURL" class="img-fluid" width="200px" *ngIf="category?.id == 0 && imgURL">
+
+                    <img [src]="category?.imagePath" class="img-fluid" width="200px" *ngIf="category?.id != 0 && !imgURL">
+                    <img [src]="imgURL" class="img-fluid" width="200px" *ngIf="category?.id != 0 && imgURL">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-2 form-control-label" for="enabled"><b>Enabled</b></label>
+              <div class="col-md-10">
+                  <div class="form-check" >
+                    <input class="form-check-input" type="checkbox" formControlName="enabled" id="enabled">
+
+                    <label class="form-check-label" >
+                      Enabled
+                    </label>
+                  </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <input type="submit" value="Save" class="btn btn-primary m-3">
+              <input type="button" value="Cancel" class="btn btn-secondary" [routerLink]="['/categories/list']"  />
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+
+<!-- Side Navbar -->
+<nav class="side-navbar">
+  <div class="side-navbar-wrapper">
+    <!-- Sidebar Header    -->
+    <div class="sidenav-header d-flex align-items-center justify-content-center">
+      <!-- User Info-->
+      <div class="sidenav-header-inner text-center">
+        <img [src]="securityObject?.userImagePath" alt="person" class="img-fluid rounded-circle" *ngIf="securityObject?.authenticated">
+        <!-- <span class="fa fa-user fa-2x img-fluid rounded-circle" *ngIf="!securityObject?.authenticated"></span> -->
+        <h2 class="h6">
+          <a [routerLink]="['/users/account', securityObject?.userId]" routerLinkActive="router-link-active" >{{securityObject?.userName}}</a>
+        </h2>
+        <span>{{securityObject?.role}}</span>
+      </div>
+      <!-- Small Brand information, appears on minimized sidebar-->
+      <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong>T</strong><strong class="text-primary">W</strong></a></div>
+    </div>
+    <!-- Sidebar Navigation Menus-->
+    <div class="main-menu">
+      <h5 class="sidenav-heading">Main</h5>
+      <ul id="side-main-menu" class="side-menu list-unstyled">
+        <li><a  *ngIf="isAdmin()" [routerLink]="['/users']" routerLinkActive="active" > <i class="fa fa-users"></i>Users</a></li>
+        <li><a  *ngIf="isAdmin() || isEditor()" [routerLink]="['/categories']" routerLinkActive="active"> <i class="fa fa-bar-chart"></i>Categories</a></li>
+        <li><a  *ngIf="isAdmin() || isEditor()" [routerLink]="['/brands']" routerLinkActive="active"> <i class="icon-form"></i>Brands</a></li>
+        <li><a  *ngIf="isAdmin() || isEditor() || isSalesperson() || isShipper()"> <i class="icon-form"></i>Products</a></li>
+        <li><a  *ngIf="isAdmin() || isAssistant()"> <i class="fa fa-question-circle"></i>Questions</a></li>
+        <li><a  *ngIf="isAdmin() || isAssistant()"> <i class="fa fa-bar-chart"></i>Reviews</a></li>
+        <li><a  *ngIf="isAdmin() || isSalesperson()"> <i class="fa fa-address-book"></i>Customer</a></li>
+        <li><a  *ngIf="isAdmin() || isSalesperson()"> <i class="fa fa-percent"></i>Shipping Rates</a></li>
+        <li><a  *ngIf="isAdmin() || isSalesperson() || isShipper()"> <i class="fa fa-bar-chart"></i>Orders</a></li>
+        <li><a  *ngIf="isAdmin() || isSalesperson()"> <i class="fa fa-bar-chart"></i>Sales Report</a></li>
+        <li><a  *ngIf="isAdmin() || isEditor()"> <i class="fa fa-bookmark"></i>Articles</a></li>
+        <li><a  *ngIf="isAdmin() || isEditor()"> <i class="fa fa-bar-chart"></i>Menus</a></li>
+        <li><a  *ngIf="isAdmin()"> <i class="fa fa-bar-chart"></i>Settings</a></li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+<div class="page">
+  <!-- navbar-->
+  <header class="header" >
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-holder d-flex align-items-center justify-content-between">
+          <div class="navbar-header"><a id="toggle-btn" href="#" class="menu-btn"><i class="icon-bars"> </i></a><a href="index.html" class="navbar-brand">
+              <div class="brand-text d-none d-md-inline-block"><span>Tienda </span><strong class="text-primary">Web</strong></div></a></div>
+          <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+            <!-- Log in & Log out-->
+            <li class="nav-item" >
+              <a href="#" (click)="logout()" class="nav-link logout" *ngIf="securityObject?.authenticated">
+                <span class="d-none d-sm-inline-block">Logout {{securityObject?.authenticated}}</span>
+                <i class="fa fa-sign-out"></i>
+              </a>
+              <a [routerLink]="['/login']"  class="nav-link logout" *ngIf="!securityObject?.authenticated">
+                <span class="d-none d-sm-inline-block">Login {{securityObject?.authenticated}}</span>
+                <i class="fa fa-sign-in"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- Counts Section -->
+  <!-- Header Section-->
+                              <router-outlet></router-outlet>
+  <!-- Statistics Section-->
+  <!-- Updates Section -->
+  <footer class="main-footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <p>Your company &copy; 2017-2019</p>
+        </div>
+        <div class="col-sm-6 text-right">
+          <p>Design by <a href="https://bootstrapious.com/p/bootstrap-4-dashboard" class="external">Bootstrapious</a></p>
+          <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions and it helps me to run Bootstrapious. Thank you for understanding :)-->
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

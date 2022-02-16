@@ -1,0 +1,111 @@
+<app-delete-modal
+    *ngIf="brandSeleccionada"
+    [id]="brandSeleccionada.id"
+    [nombre]="brandSeleccionada.name"
+    [confirmationText]="'Are you sure to delete'"
+    [entity]="'Brand'"
+    (notificar)="borrar($event)"
+>
+</app-delete-modal>
+
+<div class="container">
+
+<div class="card mt-3">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-auto mr-auto">
+        <h2>Manage Brands</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="row mb-3 ml-1">
+      <form [formGroup]="queryForm" (ngSubmit)="search()" class="form-inline mr-auto">
+        Filter:&nbsp;&nbsp;<input formControlName="keyword" type="search" name="keyword" class="form-control">
+        &nbsp;
+        <button type="submit" class="btn btn-primary m-1">Search</button>
+        &nbsp;
+        <button type="reset" class="btn btn-secondary m-1" (click)="reset()">Clear</button>
+      </form>
+      <div class="col-auto">
+        <button class="btn btn-outline-primary" [routerLink]="['/brands/edit/0']" title="Create new brand">
+          <i class="fa fa-plus"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="full-details">
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+        <thead class="thead-dark">
+          <tr>
+            <th class="hideable-column">Brand ID</th>
+            <th>Logo</th>
+            <th>
+              <a class="text-white" *ngIf="keyword == ''"
+                [routerLink]="['/brands/page/', 1]" [queryParams]="{'sortDir':reverseSortDir}">
+                Brand Name
+              </a>
+              <a class="text-white" *ngIf="keyword != ''"
+                [routerLink]="['/brands/page/', 1]" [queryParams]="{'sortDir':reverseSortDir, 'keyword': keyword}">
+                Brand Name
+              </a>
+              &nbsp;
+              <span [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+              </span>
+            </th>
+            <th>Categories</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let brand of listBrands">
+            <td class="hideable-column">{{brand.id}}</td>
+            <td class="text-center">
+              <span *ngIf="brand.logo == null" class="fa fa-address-card fa-2x"></span>
+              <img *ngIf="brand.logo != null" [src]="brand.logoImagePath" style="width: 50px;">
+            </td>
+            <td>{{brand.name}}</td>
+            <td style="width: 550px;">
+                <span class="badge badge-pill badge-primary ml-1" *ngFor="let category of brand.categories" >{{category.name}}&nbsp;</span>
+            </td>
+            <td>
+              <a class="fa fa-edit fa-2x" [routerLink]="['/brands/edit/', brand.id]" title="Edit this brand"></a>
+              &nbsp;
+              <a class="fa fa-trash-o fa-2x text-danger" title="Delete this brand" (click)="abrirModal(brand)"></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="less-details">
+      <div *ngFor="let brand of listBrands" class="row m-2">
+        <div class="col-6">
+          <span *ngIf="brand.logo == null" class="fa fa-address-card fa-2x"></span>
+              <img *ngIf="brand.logo != null" [src]="brand.logoImagePath" style="width: 120px;">
+        </div>
+        <div class="col-6">
+          <div>{{brand.name}}</div>
+          <div>
+              <a class="fa fa-edit fa-2x" [routerLink]="['/brands/edit/', brand.id]" title="Edit this brand"></a>
+              &nbsp;
+              <a class="fa fa-trash-o fa-2x text-danger" title="Delete this brand" (click)="abrirModal(brand)"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <paginator-nav
+          *ngIf="paginador"
+          [paginador]="paginador"
+          [sortField]="sortField"
+          [sortDir]="sortDir"
+          [keyword]="keyword"
+          [entity]="'brands'"></paginator-nav>
+
+  </div>
+
+</div>
+
+</div>

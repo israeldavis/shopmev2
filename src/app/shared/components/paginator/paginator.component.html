@@ -1,0 +1,43 @@
+<div class="text-center" *ngIf="!empty">
+  <span>Showing {{entity}} # {{startCount}} to {{endCount}} of {{totalItems}}</span>
+</div>
+<div class="text-center" *ngIf="empty">
+  <span>No {{entity}} found.</span>
+</div>
+
+ <div *ngIf="paginador.totalPages > 1">
+  <nav>
+    <ul class="pagination justify-content-center flex-wrap">
+      <li class="page-item" [ngClass]="{'disabled': currentPage <= 1}">
+        <a class="page-link" [routerLink]="['/', entity,'page', 1]" *ngIf="keyword == ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir}" >First</a>
+        <a class="page-link" [routerLink]="['/', entity,'page', 1]" *ngIf="keyword != ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}" >First</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': currentPage <= 1}">
+        <a class="page-link" [routerLink]="['/', entity, 'page', previous]" *ngIf="keyword == ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir}" >Previous</a>
+        <a class="page-link" [routerLink]="['/', entity, 'page', previous]" *ngIf="keyword != ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}" >Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let pagina of paginas" [ngClass]="pagina - 1 == paginador.number ? 'active' : ''">
+        <a class="page-link" [routerLink]="['/', entity, 'page', pagina]" *ngIf="keyword == ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir}">{{pagina}}</a>
+        <a class="page-link" [routerLink]="['/', entity, 'page', pagina]" *ngIf="keyword != ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">{{pagina}}</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': currentPage >= totalPages}">
+        <a class="page-link" [routerLink]="['/', entity, 'page', next]" *ngIf="keyword == ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir}">Next</a>
+        <a class="page-link" [routerLink]="['/', entity, 'page', next]" *ngIf="keyword != ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">Next</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': currentPage >= totalPages}">
+        <a class="page-link" [routerLink]="['/', entity, 'page', totalPages]" *ngIf="keyword == ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir}">Last</a>
+        <a class="page-link" [routerLink]="['/', entity, 'page', totalPages]" *ngIf="keyword != ''"
+                             [queryParams]="{'sortField':sortField, 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">Last</a>
+      </li>
+    </ul>
+  </nav>
+</div>

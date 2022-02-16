@@ -1,0 +1,83 @@
+<app-confirm-delete-category
+  *ngIf="categorySeleccionada"
+  [id]="categorySeleccionada.id"
+  [nombre]="categorySeleccionada.name"
+  (notificar)="borrar($event)"
+></app-confirm-delete-category>
+
+<div class="container">
+
+  <div class="card mt-3">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-auto mr-auto">
+          <h2>Manage Categories</h2>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row mb-3 ml-1">
+        <form [formGroup]="queryForm" (ngSubmit)="search()" class="form-inline mr-auto">
+          Filter:&nbsp;&nbsp;<input formControlName="keyword" type="search" name="keyword" class="form-control">&nbsp;
+          <button type="submit" class="btn btn-primary">Search</button>&nbsp;
+          <button type="reset" class="btn btn-secondary" (click)="reset()">Clear</button>
+        </form>
+        <div class="col-auto">
+          <button class="btn btn-outline-primary" [routerLink]="['/categories/edit/0']" title='Create new category'>
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="full-details">
+        <table class="table table-bordered table-striped table-hover table-resposive-xl">
+          <thead class="thead-dark">
+            <tr>
+              <th>Id</th>
+              <th>Category Image</th>
+              <th>
+                  <a class="text-white"
+                    [routerLink]="['/categories']" [queryParams]="{'sortDir':reverseSortDir}">
+                    Category Name
+                  </a>
+                  &nbsp;
+                  <span [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                  </span>
+              </th>
+              <th>Alias</th>
+              <th>Enabled</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let category of listCategories">
+              <td>{{category.id}}</td>
+              <td class="text-center">
+                  <span *ngIf="category.image == null" class="fa fa-address-card fa-2x"></span>
+                  <img *ngIf="category.image != null" [src]="category?.imagePath" style="width: 40px;">
+              </td>
+              <td>{{category.name}}</td>
+              <td>{{category.alias}}</td>
+              <td class="text-center">
+                  <a *ngIf="!category.enabled"
+                      class="fa fa-circle fa-2x text-secondary"
+                      (click)="updateEnabledStatus(category.id, true)"
+                      title="Enable this category"
+                      ></a>
+                  <a *ngIf="category.enabled"
+                      class="fa fa-check-circle fa-2x text-primary"
+                      (click)="updateEnabledStatus(category.id, false)"
+                      title="Disable this category"
+                      ></a>
+              </td>
+              <td>
+                <a class="fa fa-edit fa-2x" [routerLink]="['/categories/edit/', category.id]" title="Edit this category"></a>
+                &nbsp;
+                <a class="fa fa-trash-o fa-2x text-danger" title="Delete this category" (click)="abrirModal(category)" *ngIf="!category.hasChildren"></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

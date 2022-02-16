@@ -1,0 +1,196 @@
+<app-confirm-delete-dialog
+  *ngIf="usuarioSeleccionado"
+  [id]="usuarioSeleccionado.id"
+  [nombre]="usuarioSeleccionado.email"
+  (notificar)="borrar($event)"></app-confirm-delete-dialog>
+
+<div class="container">
+
+    <div class="card mt-3">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-auto mr-auto">
+            <h2>Manage Users</h2>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row mb-3 ml-1">
+            <form [formGroup]="queryForm" (ngSubmit)="search()" class="form-inline mr-auto">
+              Filter:&nbsp;&nbsp; <input formControlName="keyword" type="search" name="keyword" class="form-control">&nbsp;
+              <button type="submit" class="btn btn-primary">Search</button>&nbsp;
+              <button type="reset" class="btn btn-secondary" (click)="reset()">Clear</button>
+            </form>
+            <div class="col-auto">
+              <button  (click)="exportPDF()" class="btn btn-outline-primary mr-1" title="Export to PDF">
+                <i class="fa fa-file-pdf-o"></i>
+              </button>
+              <button class="btn btn-outline-primary mr-1" (click)="exportExcel()" title="Export to Excel">
+                <i class="fa fa-file-excel-o"></i>
+              </button>
+              <button class="btn btn-outline-primary mr-1" (click)="exportCsv()" title="Export to CSV">
+                <i class="fa fa-file-text-o"></i>
+              </button>
+              <button class="btn btn-outline-primary" [routerLink]="['/users/edit/0']" title="Create new user" >
+                <i class="fa fa-user-plus"></i>
+              </button>
+            </div>
+        </div>
+        <div class="full-details">
+          <table class="table table-bordered table-striped table-hover table-responsive-xl">
+            <thead class="thead-dark">
+              <tr>
+                <th class="hideable-column">
+                  <a *ngIf="sortField != 'id'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]"
+                    [queryParams]="{'sortField':'id', 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">
+                    ID
+                  </a>
+                  <a *ngIf="sortField == 'id'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{sortField:'id','sortDir':reverseSortDir, 'keyword':keyword ? keyword : ''}">
+                    ID
+                  </a>
+                  &nbsp;
+                  <span *ngIf="sortField == 'id'"
+                      [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                  </span>
+                </th>
+                <th>Photo</th>
+                <th class="hideable-column">
+                  <a *ngIf="sortField != 'email'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{'sortField':'email', 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">
+                    Email
+                  </a>
+                  <a *ngIf="sortField == 'email'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{sortField:'email','sortDir':reverseSortDir, 'keyword':keyword ? keyword : ''}">
+                    Email
+                  </a>
+                  &nbsp;
+                  <span *ngIf="sortField == 'email'"
+                      [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                  </span>
+                </th>
+                <th>
+                  <a *ngIf="sortField != 'firstName'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{'sortField':'firstName', 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">
+                    First Name
+                  </a>
+                  <a *ngIf="sortField == 'firstName'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{sortField:'firstName','sortDir':reverseSortDir, 'keyword':keyword ? keyword : ''}">
+                    First Name
+                  </a>
+                  &nbsp;
+                  <span *ngIf="sortField == 'firstName'"
+                      [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                    </span>
+                </th>
+                <th>
+                  <a *ngIf="sortField != 'lastName'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{'sortField':'lastName', 'sortDir':sortDir, 'keyword':keyword ? keyword : ''}">
+                    Last Name
+                  </a>
+                  <a *ngIf="sortField == 'lastName'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{sortField:'lastName','sortDir':reverseSortDir, 'keyword':keyword ? keyword : ''}">
+                    Last Name
+                  </a>
+                  &nbsp;
+                  <span *ngIf="sortField == 'lastName'"
+                      [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                  </span>
+                </th>
+                <th>Roles</th>
+                <th>
+                  <a *ngIf="sortField != 'enabled'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{'sortField':'enabled', 'sortDir':sortDir}">
+                    Enabled
+                  </a>
+                  <a *ngIf="sortField == 'enabled'" class="text-white"
+                    [routerLink]="['/users/page', pageNum]" [queryParams]="{sortField:'enabled','sortDir':reverseSortDir}">
+                    Enabled
+                  </a>
+                  &nbsp;
+                  <span *ngIf="sortField == 'enabled'"
+                      [ngClass]="sortDir == 'asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'">
+                  </span>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of listUsers">
+                  <td class="hideable-column">{{usuario.id}}</td>
+                  <td class="text-center">
+                    <span *ngIf="usuario.photos == null" class="fa fa-address-card fa-2x"></span>
+                    <img *ngIf="usuario.photos != null" [src]="usuario.photosImagePath" style="width: 40px;">
+                  </td>
+                  <td class="hideable-column">{{usuario.email}}</td>
+                  <td>{{usuario.firstName}}</td>
+                  <td>{{usuario.lastName}}</td>
+                  <td>
+                    <span *ngFor="let role of usuario.roles">&nbsp;[{{role.name}}]</span>
+                  </td>
+                  <td class="text-center">
+                    <a *ngIf="!usuario.enabled"
+                        class="fa fa-circle fa-2x text-secondary"
+                        (click)="updateEnabledStatus(usuario.id, true)"
+                        title="Enable this user"
+                        ></a>
+                    <a *ngIf="usuario.enabled"
+                        class="fa fa-check-circle fa-2x  text-primary"
+                        (click)="updateEnabledStatus(usuario.id, false)"
+                        title="Disable this user"
+                        ></a>
+                  </td>
+                  <td class="text-center">
+                    <a class="fa fa-edit fa-2x" [routerLink]="['/users/edit/', usuario.id]" title="Edit this user"></a>
+                    &nbsp;
+                    <a class="fa fa-trash-o fa-2x text-danger" (click)="abrirModal(usuario)" title="Delete this user"></a>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="less-details">
+          <div *ngFor="let usuario of listUsers" class="row m-1">
+            <div class="col-4">
+                <span *ngIf="usuario.photos == null" class="fa fa-address-card fa-2x"></span>
+                <img *ngIf="usuario.photos != null" [src]="usuario.photosImagePath" style="width: 100px;">
+            </div>
+
+            <div class="col-8">
+              <div>{{usuario.firstName}}&nbsp;{{usuario.lastName}}</div>
+              <span *ngFor="let role of usuario.roles">&nbsp;[{{role.name}}]</span>
+              <div class="m-1">
+                <a class="fa fa-edit fa-2x m-1" [routerLink]="['/users/edit/', usuario.id]" title="Edit this user"></a>
+                    &nbsp;
+                <a class="fa fa-trash-o fa-2x text-danger m-1" (click)="abrirModal(usuario)" title="Delete this user"></a>
+                &nbsp;
+                <a *ngIf="!usuario.enabled"
+                        class="fa fa-circle fa-2x text-secondary"
+                        (click)="updateEnabledStatus(usuario.id, true)"
+                        title="Enable this user"
+                  ></a>
+                  <a *ngIf="usuario.enabled"
+                        class="fa fa-check-circle fa-2x  text-primary"
+                        (click)="updateEnabledStatus(usuario.id, false)"
+                        title="Disable this user"
+                  ></a>
+              </div>
+            </div>
+            <div>&nbsp;</div>
+          </div>
+        </div>
+
+        <paginator-nav
+          *ngIf="paginador"
+          [paginador]="paginador"
+          [sortField]="sortField"
+          [sortDir]="sortDir"
+          [keyword]="keyword"
+          [entity]="'users'"></paginator-nav>
+
+      </div>
+    </div>
+
+</div>

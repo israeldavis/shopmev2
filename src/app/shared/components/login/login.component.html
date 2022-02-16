@@ -1,0 +1,45 @@
+<div class="login-page">
+  <div class="container">
+    <div class="form-outer text-center d-flex align-items-center">
+      <div class="form-inner" style="width: 600px;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-danger" *ngIf="securityObject && !securityObject.authenticated">
+              <p>Invalid User Name/Password.</p>
+            </div>
+          </div>
+        </div>
+        <div class="logo text-uppercase">
+          <span></span>
+          <strong class="text-primary">Login</strong>
+        </div>
+        <form class="text-left form-validate" [formGroup]="loginForm" (ngSubmit)="login()">
+          <div class="form-group-material">
+            <input  id="login-username"
+                    type="text"
+                    name="loginUsername"
+                    class="input-material"
+                    formControlName="email"
+                    [ngClass]="{'is-invalid': emailMessage}">
+                    <span class="invalid-feedback" style="display:inline">{{emailMessage}}</span>
+            <label for="login-username" class="label-material">Username</label>
+          </div>
+          <div class="form-group-material">
+            <input  id="login-password"
+                    type="password"
+                    name="loginPassword"
+                    class="input-material"
+                    formControlName="password"
+                    [ngClass]="{'is-invalid': passwordMessage}">
+                    <span class="invalid-feedback" style="display:inline">{{passwordMessage}}</span>
+            <label for="login-password" class="label-material">Password</label>
+          </div>
+          <div class="form-group text-center">
+            <button type="submit" id="login" class="btn btn-primary" [disabled]="!loginForm.valid">Login</button>
+          </div>
+        </form><a href="#" class="forgot-pass">Forgot Password?</a><small>Do not have an account? </small><a href="register.html" class="signup">Signup</a>
+      </div>
+
+    </div>
+  </div>
+</div>
